@@ -9,19 +9,22 @@
 
 The U.S. Office of Foreign Labor Certification (OFLC) processes hundreds of thousands of visa applications annually — a volume that makes manual review increasingly difficult. This project builds a machine learning solution to predict visa certification outcomes, helping prioritize applications with higher approval likelihood and supporting more efficient review workflows.
 
-**Dataset:** ~25 features covering applicant education, job experience, employer size, prevailing wage, continent of origin, and more.
+**Dataset:** 25,480 applications × 12 features covering applicant education, job experience, employer size, prevailing wage, continent of origin, and more.
 
 ---
 
 ## Key Results
 
+*All scores are F1 on original (non-resampled) data. Oversampling (SMOTE) and undersampling were also tested but did not yield meaningful improvements.*
+
 | Model | Training F1 | Validation F1 | Notes |
 |---|---|---|---|
-| Decision Tree | 1.000 | — | Overfit |
+| Decision Tree | 1.000 | 0.749 | Overfit |
 | Random Forest | 1.000 | 0.805 | Overfit |
 | Bagging | 0.990 | 0.778 | High variance |
 | AdaBoost | 0.820 | 0.818 | Stable |
 | Gradient Boosting | 0.829 | 0.827 | Strong |
+| XGBoost (before tuning) | 0.896 | 0.808 | Improved by tuning |
 | **XGBoost (tuned)** | **0.834** | **0.828** | **✅ Final model** |
 
 > **F1-score** was selected as the primary metric due to moderate class imbalance between certified and denied cases.
