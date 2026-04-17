@@ -1,41 +1,74 @@
-# EasyVisa ML Analysis
+# EasyVisa — Visa Approval Prediction
+
+**Tools:** Python · scikit-learn · XGBoost · imbalanced-learn · pandas · matplotlib · seaborn  
+**Type:** Supervised Learning / Binary Classification
+
+---
 
 ## Overview
-This project analyzes visa application data and builds machine learning models to help identify factors associated with visa approval.
 
-## Objective
-The goal of this project is to explore applicant and job-related features and develop a classification model that can support visa approval prediction.
+The U.S. Office of Foreign Labor Certification (OFLC) processes hundreds of thousands of visa applications annually — a volume that makes manual review increasingly difficult. This project builds a machine learning solution to predict visa certification outcomes, helping prioritize applications with higher approval likelihood and supporting more efficient review workflows.
 
-## Tools Used
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Data Visualization
-- Machine Learning
+**Dataset:** ~25 features covering applicant education, job experience, employer size, prevailing wage, continent of origin, and more.
 
-## Business Context
-Visa application review can be complex and time-consuming. This project uses historical application data to better understand patterns in visa case outcomes and build a predictive model to support decision-making.
+---
 
-## Key Questions
-- Which factors are most related to visa approval?
-- What patterns appear in the data?
-- Which machine learning model performs best for classification?
-- How can the results support business decision-making?
+## Key Results
+
+| Model | Training F1 | Validation F1 | Notes |
+|---|---|---|---|
+| Decision Tree | 1.000 | — | Overfit |
+| Random Forest | 1.000 | 0.805 | Overfit |
+| Bagging | 0.990 | 0.778 | High variance |
+| AdaBoost | 0.820 | 0.818 | Stable |
+| Gradient Boosting | 0.829 | 0.827 | Strong |
+| **XGBoost (tuned)** | **0.834** | **0.828** | **✅ Final model** |
+
+> **F1-score** was selected as the primary metric due to moderate class imbalance between certified and denied cases.
+
+**Final model:** Tuned XGBoost classifier on original (non-oversampled) data  
+- Training F1: **0.834** | Validation F1: **0.828**  
+- Minimal train/validation gap indicates good generalization with limited overfitting
+
+---
 
 ## Key Findings
-- Multiple applicant and job-related features influenced visa case outcomes.
-- Exploratory analysis helped identify important patterns in the dataset.
-- Classification modeling was used to compare predictive performance.
-- The final results provided insight into which profiles were more likely to be approved.
 
-## Skills Demonstrated
-- Data cleaning and preprocessing
-- Exploratory data analysis
-- Feature evaluation
-- Classification modeling
-- Model comparison and interpretation
+**Top predictors of visa approval (feature importance):**
+1. `education_of_employee` — High School level negatively associated with approval
+2. `has_job_experience` — Prior experience is a strong positive predictor
+3. `education_of_employee` — Master's degree positively associated with approval
+
+**Business insights:**
+- Education level and job experience are the most influential factors in approval decisions
+- Company size (number of employees) has only marginal impact on approval rate
+- Oversampling (SMOTE) did not meaningfully improve model performance, indicating the class imbalance was manageable with the original data
+
+---
+
+## Business Recommendations
+
+1. **Prioritize high-education, experienced applicants** — Applications from candidates with a Master's degree or higher and prior job experience show the highest approval likelihood; these can be fast-tracked for review.
+2. **Flag high-school-only applicants for additional review** — Not to deny automatically, but to ensure supporting documentation is thorough.
+3. **Deploy model for pre-screening** — The XGBoost model (F1: 0.828) can reduce manual review burden while maintaining accuracy.
+4. **Retrain periodically** — Labor market conditions change; model should be updated with new application data regularly.
+
+---
+
+## ML Techniques Demonstrated
+
+- Exploratory Data Analysis (univariate & bivariate)
+- Feature encoding and preprocessing
+- Class imbalance handling (SMOTE via imbalanced-learn)
+- Model training and comparison: Decision Tree, Random Forest, Bagging, AdaBoost, Gradient Boosting, XGBoost
+- Hyperparameter tuning
+- Evaluation with precision, recall, F1-score, confusion matrix
+- Feature importance analysis
+
+---
 
 ## Files
-- Project notebook / HTML export
-- README
+
+| File | Description |
+|---|---|
+| `EasyVisa_Analysis.ipynb` | Full notebook with code, outputs, and commentary |
